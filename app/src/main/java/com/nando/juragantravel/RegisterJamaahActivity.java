@@ -1,7 +1,6 @@
 package com.nando.juragantravel;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,20 +14,22 @@ import android.database.sqlite.SQLiteDatabase;
 import android.content.ContentValues;
 import android.widget.Toast;
 import android.text.InputType;
-import android.graphics.drawable.Drawable;
+import android.content.SharedPreferences;
+import android.content.Context;
+import android.text.TextUtils;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterJamaahActivity extends AppCompatActivity {
 
-    private EditText namalengkapEditText, emailEditText, nikEditText, nohpEditText, alamatEditText, usernameEditText;
+    private EditText namalengkapEditText, emailEditText, nikEditText, nohpEditText, alamatEditText, usernameEditText, radioGroup;
     private Spinner genderSpinner;
     private DatabaseHelper databaseHelper;
-    private boolean isNikVisible = false; // Ganti nama variabel ini
+    private boolean isNikVisible = false;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_register_jamaah);
 
         // Inisialisasi komponen EditText
         namalengkapEditText = findViewById(R.id.namalengkap);
@@ -44,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
         // Inisialisasi database helper
         databaseHelper = new DatabaseHelper(this);
 
-        // Buat array pilihan jenis kelamin
+        // Pilihan jenis kelamin
         String[] genders = {"Laki-laki", "Perempuan"};
 
         // Buat adapter untuk Spinner
@@ -61,6 +62,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Mengambil data dari formulir
                 String fullName = namalengkapEditText.getText().toString();
+                saveFullName(fullName); // Simpan Nama Lengkap ke SharedPreferences
+
                 String email = emailEditText.getText().toString();
                 String nik = nikEditText.getText().toString();
                 String phone = nohpEditText.getText().toString();
@@ -68,7 +71,6 @@ public class RegisterActivity extends AppCompatActivity {
                 String address = alamatEditText.getText().toString();
                 String username = usernameEditText.getText().toString();
 
-                // Validasi kolom
                 boolean isValid = true;
                 if (fullName.isEmpty()) {
                     namalengkapEditText.setError("Nama lengkap harus diisi");
@@ -114,19 +116,19 @@ public class RegisterActivity extends AppCompatActivity {
 
                     if (newRowId != -1) {
                         // Data berhasil disimpan
-                        Toast.makeText(RegisterActivity.this, "Pendaftaran berhasil", Toast.LENGTH_SHORT).show();
-
-                        // Navigasi ke aktivitas activity_log_jamaah
-                        Intent intent = new Intent(RegisterActivity.this, LogJamaahActivity.class);
+                        Toast.makeText(RegisterJamaahActivity.this, "Pendaftaran berhasil", Toast.LENGTH_SHORT).show();
+                        // Navigasi ke aktivitas LogJamaahActivity
+                        Intent intent = new Intent(RegisterJamaahActivity.this, LogJamaahActivity.class);
                         startActivity(intent);
                     } else {
-                        // Gagal menyimpan data
-                        Toast.makeText(RegisterActivity.this, "Gagal mendaftar", Toast.LENGTH_SHORT).show();
+                        // Gagal mendaftar
+                        Toast.makeText(RegisterJamaahActivity.this, "Gagal mendaftar", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         });
 
+        // Menambahkan onTouchListener untuk ikon Show/Hide NIK
         nikEditText.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
@@ -142,8 +144,14 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        // Memeriksa apakah ada Nama Lengkap yang disimpan di SharedPreferences
+        String savedFullName = getSavedFullName();
+        if (!TextUtils.isEmpty(savedFullName)) {
+            namalengkapEditText.setText(savedFullName);
+        }
     }
 
+    // Metode untuk mengganti visibilitas NIK (terlihat atau tersembunyi)
     private void toggleNikVisibility(EditText editText) {
         if (isNikVisible) {
             editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
@@ -153,6 +161,21 @@ public class RegisterActivity extends AppCompatActivity {
             editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.baseline_visibility_24, 0);
         }
 
+        // Memperbarui status visibilitas
         isNikVisible = !isNikVisible;
+    }
+
+    // Metode untuk menyimpan Nama Lengkap ke SharedPreferences
+    private void saveFullName(String fullName) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("fullName", fullName);
+        editor.apply();
+    }
+
+    // Metode untuk mengambil Nama Lengkap dari SharedPreferences
+    private String getSavedFullName() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("fullName", "");
     }
 }

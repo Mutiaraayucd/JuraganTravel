@@ -26,6 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // Membuat tabel dalam database
         String createTable = "CREATE TABLE " + TABLE_NAME + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_FULL_NAME + " TEXT, " +
@@ -39,6 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean checkNIK(String nik) {
+        // Memeriksa apakah NIK sudah ada dalam database
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {COLUMN_ID};
         String selection = COLUMN_NIK + " = ?";
@@ -51,6 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Menghapus tabel lama saat upgrade dan membuat tabel baru
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
@@ -68,6 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_ADDRESS, address);
         values.put(COLUMN_USERNAME, username);
 
+        // Memasukkan data pendaftaran ke dalam tabel
         long newRowId = db.insert(TABLE_NAME, null, values);
         db.close();
 
@@ -75,6 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Boolean checkEmail(String email) {
+        // Memeriksa apakah email sudah ada dalam database
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_EMAIL + " = ?", new String[]{email});
         boolean exists = cursor.getCount() > 0;

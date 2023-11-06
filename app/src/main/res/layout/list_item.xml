@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/etlist"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/etFullname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nama Lengkap"
+        android:textSize="20dp"
+        />
+    <TextView
+        android:id="@+id/etUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="username"/>
+    <TextView
+        android:id="@+id/etEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="email"/>
+    <TextView
+        android:id="@+id/etPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="password"/>
+    <TextView
+        android:id="@+id/etNohp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="nomer hp" />
+    <TextView
+        android:id="@+id/etGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="gender"/>
+    <TextView
+        android:id="@+id/etAgama"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="agama"/>
+    <TextView
+        android:id="@+id/etTgllahir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tanggal lahir"/>
+    <TextView
+        android:id="@+id/etAlamat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="alamat"/>
+
+</LinearLayout>
